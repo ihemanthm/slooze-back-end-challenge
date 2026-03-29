@@ -48,7 +48,8 @@ htmlcov/
 *.sqlite3
 
 # Alembic
-alembic/versions/*.py
+# Keep migration files - they're needed for deployment
+# alembic/versions/*.py
 !alembic/versions/.gitkeep
 
 # Git
