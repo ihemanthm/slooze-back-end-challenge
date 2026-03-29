@@ -5,6 +5,18 @@
 
 A production-ready role-based food ordering backend API built with FastAPI, implementing RBAC (Role-Based Access Control) and Re-BAC (Relationship-Based Access Control) for country-based data isolation.
 
+## 🌐 Live Deployment
+
+**The application is deployed and live on Render:**
+
+🔗 **API Base URL:** https://slooze-back-end-challenge.onrender.com
+
+📚 **Interactive API Documentation (Swagger UI):** https://slooze-back-end-challenge.onrender.com/docs
+
+📖 **Alternative Documentation (ReDoc):** https://slooze-back-end-challenge.onrender.com/redoc
+
+⚠️ **Note:** The free tier sleeps after 15 minutes of inactivity. First request may take ~30 seconds to wake up.
+
 ## ✨ Features Implemented
 
 ✅ **RBAC (8 points)** - Role-based permissions for Admin, Manager, and Member  
@@ -104,6 +116,23 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 - `PUT /api/v1/payment-methods/{id}` - Update payment method (Admin only)
 - `DELETE /api/v1/payment-methods/{id}` - Delete payment method (Admin only)
 
+### 📥 Postman Collection
+
+Download the OpenAPI specification for use with Postman or Insomnia:
+
+**Option 1: From Live API**
+```bash
+curl https://slooze-back-end-challenge.onrender.com/api/v1/openapi.json > slooze-api.json
+```
+
+**Option 2: From Repository**
+The `slooze-api-spec.json` file is included in the repository.
+
+**Import to Postman:**
+1. Open Postman → Import
+2. Select the JSON file
+3. All endpoints will be imported with examples
+
 ## 🧪 Running Tests
 
 ```bash
@@ -130,8 +159,27 @@ pytest tests/test_auth.py -v
 
 ## 📖 Documentation
 
-For detailed implementation documentation, architecture details, and setup instructions, see:
-- **API Docs**: http://localhost:8000/docs (after starting server)
+### Complete Implementation Guide
+**[Implementation.md](./Implementation.md)** - Comprehensive documentation including:
+- Project architecture and design decisions
+- Database schema and relationships
+- RBAC and Re-BAC implementation details
+- Complete setup instructions from scratch
+- API usage examples with curl commands
+- Security features and best practices
+- Deployment considerations
+
+### API Documentation
+- **Live Swagger UI**: https://slooze-back-end-challenge.onrender.com/docs
+- **Live ReDoc**: https://slooze-back-end-challenge.onrender.com/redoc
+- **Local Swagger UI**: http://localhost:8000/docs (after starting server locally)
+- **OpenAPI Spec**: Available in `slooze-api-spec.json`
+
+### Additional Guides
+- **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** - How to test the application
+- **[QUICK_START.md](./QUICK_START.md)** - Fast reference guide
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Docker deployment instructions
+- **[CLOUD_DEPLOYMENT.md](./CLOUD_DEPLOYMENT.md)** - Cloud platform deployment (Render, Railway, Fly.io)
 
 ## 🎯 Project Structure
 
