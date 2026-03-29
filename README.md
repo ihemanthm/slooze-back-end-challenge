@@ -1,16 +1,21 @@
 ![Logo](./public/FFFFFF-1.png)
-# Slooze take home challenge!!
+# Slooze Food Ordering Backend API
+
 **ROLE:** **Software Engineer - Backend**
 
-## Question:
+A production-ready role-based food ordering backend API built with FastAPI, implementing RBAC (Role-Based Access Control) and Re-BAC (Relationship-Based Access Control) for country-based data isolation.
 
-Design and implement the back-end for role-based food ordering web application where users (Admins, Managers, and Members) can perform specific functions—such as viewing restaurants, placing or canceling orders, and managing carts, payment methods—based on their assigned role.
+## ✨ Features Implemented
 
-**Assume**: Mock restaurants & menu items onto your app
+✅ **RBAC (8 points)** - Role-based permissions for Admin, Manager, and Member  
+✅ **Re-BAC (10 bonus points)** - Country-based data isolation (India/America)  
+✅ **Full Application (12 points)** - Complete food ordering system with all features  
+✅ **Comprehensive Testing** - Automated test suite with pytest  
+✅ **API Documentation** - Auto-generated Swagger UI and ReDoc  
+✅ **Database Seeding** - Pre-populated with 6 users, 10 restaurants, 50+ menu items
 
-**Extension**: Implement a relational access model that restricts users to operate only within their assigned country (India or America).
+## 🎯 Feature Breakdown & Role-Based Access
 
-### 🎯 Feature Breakdown & Role-Based Access
 | **Feature**                      | **Admin** | **Manager** | **Member** |
 |----------------------------------|----------|------------|------------|
 | View restaurants & menu items   | ✅       | ✅         | ✅         |
@@ -19,28 +24,137 @@ Design and implement the back-end for role-based food ordering web application w
 | Cancel an order                 | ✅       | ✅         | ❌         |
 | Add / Modify payment methods    | ✅       | ❌         | ❌         |
 
+### Country-Based Access (Re-BAC)
+- **Managers & Members**: Can only access data from their assigned country
+- **Admin**: Has global access across all countries (India and America)
 
-### Tech Stack:
-- **Backend**: NestJS · GraphQL · Prisma
-- **Auth**: Role-based access control (RBAC) · Bonus: Re-BAC
----
+## 🚀 Quick Start
 
-## Reference:
+### Prerequisites
+- Python 3.11+
+- PostgreSQL 14+ (or use Docker)
+- pip
 
-Refer to the pdf attached in the repository for more details on the problem statement
+### Installation
 
-## 📤 Submission
-- Upload your code to GitHub or share as a CodeSandbox/StackBlitz link
-- Include instructions to run the app locally (e.g., npm install && npm run dev)
-- (Optional) Deploy and share a live link using Vercel, Netlify, etc.
+```bash
+# 1. Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-## Connect with Us:
+# 2. Install dependencies
+pip install -r requirements.txt
 
-Reach out to **[interview@slooze.xyz](mailto:interview@slooze.xyz)** to submit your solutions or if you may have any questions related to the challenege
+# 3. Start PostgreSQL (using Docker)
+docker-compose up -d
 
-## © Copyright Notice
+# 4. Setup environment
+cp .env.example .env
 
-**© Slooze. All Rights Reserved.**
+# 5. Run migrations
+alembic revision --autogenerate -m "Initial migration"
+alembic upgrade head
 
-Please do not share or distribute this material outside the intended evaluation process.  
-For queries, contact us !!
+# 6. Seed database
+python scripts/seed_data.py
+
+# 7. Start server
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Access Points
+- **API**: http://localhost:8000
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+
+## 🔐 Test Credentials
+
+| User | Email | Password | Role | Country |
+|------|-------|----------|------|---------|
+| Nick Fury | nick.fury@slooze.com | admin123 | ADMIN | AMERICA |
+| Captain Marvel | captain.marvel@slooze.com | manager123 | MANAGER | INDIA |
+| Captain America | captain.america@slooze.com | manager123 | MANAGER | AMERICA |
+| Thanos | thanos@slooze.com | member123 | MEMBER | INDIA |
+| Thor | thor@slooze.com | member123 | MEMBER | INDIA |
+| Travis | travis@slooze.com | member123 | MEMBER | AMERICA |
+
+## 📚 API Endpoints
+
+### Authentication
+- `POST /api/v1/auth/register` - Register new user
+- `POST /api/v1/auth/login` - Login and get JWT token
+- `GET /api/v1/auth/me` - Get current user info
+
+### Restaurants
+- `GET /api/v1/restaurants` - List restaurants (country-filtered)
+- `GET /api/v1/restaurants/{id}` - Get restaurant with menu
+- `GET /api/v1/restaurants/{id}/menu` - Get menu items
+
+### Orders
+- `POST /api/v1/orders` - Create order
+- `GET /api/v1/orders` - List user's orders
+- `GET /api/v1/orders/{id}` - Get order details
+- `POST /api/v1/orders/{id}/items` - Add items to order
+- `POST /api/v1/orders/{id}/checkout` - Checkout (Admin/Manager only)
+- `DELETE /api/v1/orders/{id}` - Cancel order (Admin/Manager only)
+
+### Payment Methods
+- `GET /api/v1/payment-methods` - List payment methods
+- `POST /api/v1/payment-methods` - Add payment method (Admin only)
+- `PUT /api/v1/payment-methods/{id}` - Update payment method (Admin only)
+- `DELETE /api/v1/payment-methods/{id}` - Delete payment method (Admin only)
+
+## 🧪 Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=app --cov-report=html
+
+# Run specific test
+pytest tests/test_auth.py -v
+```
+
+## 🏗️ Tech Stack
+
+- **Framework**: FastAPI 0.109.0
+- **ORM**: SQLAlchemy 2.0.25
+- **Database**: PostgreSQL 15
+- **Authentication**: JWT (python-jose)
+- **Password Hashing**: bcrypt
+- **Migrations**: Alembic 1.13.1
+- **Testing**: pytest 7.4.4
+- **Validation**: Pydantic v2
+
+## 📖 Documentation
+
+For detailed implementation documentation, architecture details, and setup instructions, see:
+- **API Docs**: http://localhost:8000/docs (after starting server)
+
+## 🎯 Project Structure
+
+```
+slooze-backend-challenge/
+├── app/
+│   ├── api/v1/          # API endpoints
+│   ├── core/            # Config, security, permissions
+│   ├── models/          # SQLAlchemy models
+│   ├── schemas/         # Pydantic schemas
+│   ├── services/        # Business logic
+│   └── db/              # Database session
+├── alembic/             # Database migrations
+├── scripts/             # Utility scripts
+├── tests/               # Test suite
+└── Implementation.md    # Detailed documentation
+```
+
+## 🔒 Security Features
+
+- JWT-based authentication with token expiration
+- Password hashing with bcrypt
+- Role and country claims in JWT payload
+- Input validation with Pydantic
+- SQL injection prevention via ORM
+- CORS configuration
