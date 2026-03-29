@@ -37,10 +37,12 @@ COPY ./app ./app
 COPY ./alembic ./alembic
 COPY ./alembic.ini ./alembic.ini
 COPY ./scripts ./scripts
+COPY ./start.sh ./start.sh
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
-    chown -R appuser:appuser /app
+    chown -R appuser:appuser /app && \
+    chmod +x /app/start.sh
 
 # Switch to non-root user
 USER appuser
@@ -55,5 +57,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:8000/api/v1/openapi.json')" || exit 1
 
-# Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the application with startup script
+CMD ["./start.sh"]
